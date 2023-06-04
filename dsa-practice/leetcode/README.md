@@ -1,4 +1,4 @@
-# Solutions to the Leetcode problems
+### Solutions to the Leetcode problems
 
 **NOTE**: This repo contains solutions I have done from leetcode, this is for
 practice. Most of the time I do solve and move on and dont check on the solutions
