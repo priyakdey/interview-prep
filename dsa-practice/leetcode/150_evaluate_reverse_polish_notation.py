@@ -48,33 +48,47 @@ class Stack:
     def __init__(self) -> None:
         self.data = []
 
-    def push(self, v: int) -> None:
-        self.data.append(v)
+    def push(self, val: int) -> None:
+        self.data.append(val)
 
     def pop(self) -> int:
-        v = self.data[-1]
-        del self.data[-1]
-        return v
+        if self.is_empty():
+            raise Exception("Empty stack")
+        return self.data.pop(-1)
+
+    def is_empty(self) -> bool:
+        return len(self.data) == 0
 
 
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        """This just evaluates a reverse polish notation.
-        Does not validate the notation and assumes it a valid notation"""
+        """Method evaluates Reverse Polish notation, it does not validate it.
+        It is assumed, some client will validate the expr before passing it on
+        it this method.
+
+        If expr reached this method, we consider it to be a valid RPN expression
+        with valid numeric operators and operands, and not division by zero.
+        """
+
+        def eval(a: int, b: int, op: str) -> int:
+            if op == "+":
+                return a + b
+            if op == "-":
+                return a - b
+            if op == "*":
+                return a * b
+            # we consider that expression is already validated and hence division by 0 is not a scenario
+            if op == "/":
+                return int(a / b)
 
         stack = Stack()
+
         for token in tokens:
             if token in ["+", "-", "*", "/"]:
-                b = int(stack.pop())
-                a = int(stack.pop())
-                if token == "+":
-                    stack.push(a + b)
-                elif token == "-":
-                    stack.push(a - b)
-                elif token == "*":
-                    stack.push(a * b)
-                else:
-                    stack.push(int(a / b))
+                b = stack.pop()
+                a = stack.pop()
+                result = eval(a, b, token)
+                stack.push(result)
             else:
                 stack.push(int(token))
 
